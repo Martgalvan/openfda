@@ -10,6 +10,7 @@ print(r1.status, r1.reason)
 repos_raw = r1.read().decode("utf-8")
 conn.close()
 repos = json.loads(repos_raw)
-
+i= 1
 for elem in repos["results"]:
-    print(elem["id"])
+    print("the id of the drug number",i,"is",elem["id"])
+    i +=1
