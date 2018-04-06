@@ -27,12 +27,12 @@ def process_client(clientsocket):
             drug.append(repos['results'][a]['id'])
         else:
             a += 1
-            drug.append("There is no drug in  this index")
+            drug.append("There is no drug in this index")
 
     with open("trial3.html", "w") as f:
         f.write(sd)
         for el in drug:
-            el_1 = "<\t>" + "<li>" + el
+            el_1 = "<t>" + "<li>" + el
             f.write(el_1)
 
 
@@ -42,15 +42,6 @@ def process_client(clientsocket):
     print(clientsocket)
     print(clientsocket.recv(1024))
 
-    f = open('trial3.html', 'w')
-
-    message = """<html>
-    <head></head>
-    <body><p>Hello World!</p></body>
-    </html>"""
-
-    f.write(message)
-    f.close()
 
     web_contents = file
     web_headers = "HTTP/1.1 200"
