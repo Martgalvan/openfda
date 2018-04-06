@@ -16,11 +16,43 @@ def process_client(clientsocket):
     conn.close()
     repos = json.loads(repos_raw)
 
+    drug = []
+    a = 0
+    sd = "<ol>" + "\n"
+    fd = "<\ol>"
+
+    while a < 10:
+        if 'active_ingredient' in repos['results'][a]:
+            a += 1
+            drug.append(repos['results'][a]['active_ingredient'][0])
+        else:
+            a += 1
+            drug.append("There is no drug in  this index")
+
+    with open("trial3.html", "w") as f:
+        f.write(sd)
+        for el in drug:
+            el_1 = "<\t>" + "<li>" + el + "<\li>"
+            f.write(el_1)
+        f.write(fd)
+
+    with open("trial3.html", "r") as f:
+        file = f.read()
+
     print(clientsocket)
     print(clientsocket.recv(1024))
-    with open("patatotas.html","r") as f:
-        hey = f.read()
-    web_contents = hey
+
+    f = open('trial3.html', 'w')
+
+    message = """<html>
+    <head></head>
+    <body><p>Hello World!</p></body>
+    </html>"""
+
+    f.write(message)
+    f.close()
+
+    web_contents = file
     web_headers = "HTTP/1.1 200"
     web_headers += "\n" + "Content-Type: text/html"
     web_headers += "\n" + "Content-Length: %i" % len(str.encode(web_contents))
@@ -33,7 +65,7 @@ serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # bind the socket to a public host, and a well-known port
 hostname = socket.gethostname()
 # Let's use better the local interface name
-hostname = "10.10.105.37"
+hostname = "10.10.107.77"
 try:
     serversocket.bind((hostname, PORT))
     # become a server socket
