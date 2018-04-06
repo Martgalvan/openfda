@@ -19,12 +19,12 @@ def process_client(clientsocket):
     drug = []
     a = 0
     sd = "<ol>" + "\n"
-    fd = "<\ol>"
+
 
     while a < 10:
         if 'active_ingredient' in repos['results'][a]:
             a += 1
-            drug.append(repos['results'][a]['active_ingredient'][0])
+            drug.append(repos['results'][a]['id'])
         else:
             a += 1
             drug.append("There is no drug in  this index")
@@ -32,9 +32,9 @@ def process_client(clientsocket):
     with open("trial3.html", "w") as f:
         f.write(sd)
         for el in drug:
-            el_1 = "<\t>" + "<li>" + el + "<\li>"
+            el_1 = "<\t>" + "<li>" + el
             f.write(el_1)
-        f.write(fd)
+
 
     with open("trial3.html", "r") as f:
         file = f.read()
@@ -65,7 +65,7 @@ serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # bind the socket to a public host, and a well-known port
 hostname = socket.gethostname()
 # Let's use better the local interface name
-hostname = "10.10.107.77"
+hostname = "10.10.107.36"
 try:
     serversocket.bind((hostname, PORT))
     # become a server socket
