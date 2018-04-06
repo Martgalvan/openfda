@@ -18,6 +18,7 @@ def process_client(clientsocket):
 
     drug = []
     a = 0
+    intro= "<head>"+"Here is your drugs ID list"
     sd = "<ol>" + "\n"
 
 
@@ -30,6 +31,7 @@ def process_client(clientsocket):
             drug.append("There is no drug in this index")
 
     with open("trial3.html", "w") as f:
+        f.write(intro)
         f.write(sd)
         for el in drug:
             el_1 = "<t>" + "<li>" + el
