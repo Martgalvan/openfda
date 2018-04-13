@@ -1,6 +1,7 @@
 import socket
 import http.client
 import json
+import http.server
 
 PORT = 8092
 MAX_OPEN_REQUESTS = 5

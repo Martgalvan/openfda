@@ -1,8 +1,12 @@
 import http.server
 import json
 import socketserver
+import http.client
 
-PORT = 8000
+
+PORT = 9008
+IP = "localhost"
+
 
 # HTTPRequestHandler class
 class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
@@ -57,6 +61,16 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
         # Write content as utf-8 data
         self.wfile.write(bytes(message, "utf8"))
         return
+
+
+    if path == "/":
+        filename = "search.html"
+    else:
+        if path == "/new":
+            filename = "new.html"
+        else:
+            filename = "error.html"
+
 
 Handler = http.server.SimpleHTTPRequestHandler
 Handler = testHTTPRequestHandler
