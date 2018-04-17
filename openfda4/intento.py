@@ -14,8 +14,6 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         # Send response status code
         self.send_response(200)
-
-        # Send headers
         self.send_header('Content-type', 'text/html')
         self.end_headers()
 
@@ -23,52 +21,44 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
         def file_sent(nombre_arch):
             with open(nombre_arch) as f:
                 mensaje= f.read
-            self.wfile.write(bytes(mensaje,"utf8"))
+                self.wfile.write(bytes(str(mensaje),"utf8"))
 
-        #headers = {'User-Agent': 'http-client'}
 
-        #conn = http.client.HTTPSConnection("api.fda.gov")
-        #conn.request("GET", "/drug/label.json?search=generic_name:%s&limit=%s", None, headers)
-        #r1 = conn.getresponse()
-        #print(r1.status, r1.reason)
-        #repos_raw = r1.read().decode("utf-8")
-        #conn.close()
-        #repos = json.loads(repos_raw)
+        def ask_inf(generic_name,limit):
 
-        with open("fda_info.html", "w"):
-            self.wfile.write(bytes('<html><head><h1>You searched for %s drugs </h1>\n<ol>' % limit,"utf8"))
+            headers = {'User-Agent': 'http-client'}
+            conn = http.client.HTTPSConnection("api.fda.gov")
+            conn.request("GET", "/drug/label.json?search=generic_name:%s&limit=%s" % (generic_name,limit), None, headers)
+            r1 = conn.getresponse()
+            print(r1.status, r1.reason)
+            repos_raw = r1.read().decode("utf-8")
+            conn.close()
+            repos = json.loads(repos_raw)
 
-            for i in range(len(repos['results'])):
-                try:
-                    drug = "<li>" + "brand name is: " + repos['results'][i]["openfda"]["brand_name"][0] + "</li>"
-                    self.wfile.write(bytes(drug, "utf8"))
-                except KeyError:
-                    continue
-            self.wfile.write(bytes('</ol><h3>Thank you, % (IP, PORT), "utf8"))
 
-        # Send message back to client
-        message = "Hello world! " + self.path
-        # Write content as utf-8 data
-        hola = self.wfile.write(bytes(message, "utf8"))
-        path = self.path
-        if path == "/":
-            filename = "index.html"
-        else:
-            if path == "/new":
-                filename = "new.html"
-            else:
-                filename = "error.html"
-        with open(filename, "r") as f:
-            content = f.read()
 
-        header = "Content-Type: text/html\n"
-        header += "Content-Length: {}\n".format(len(str.encode(content)))
+            path = self.path
 
-        response_msg = str.encode(status_line + header + "\n" + content)
-        clientsocket.send(response_msg)
+            if path == "/":
+                nombre_arch = "search.html"
+                print("SEARCH: client entered search web")
+                file_sent(nombre_arch)
 
-        print("File served!")
-        return
+            elif 'Search' in path:  # let´s try to find a drug and a limit entered by user
+                print("SEARCHED: client has attemped to make a request")
+                data = self.path.strip('/search.html').split('&')
+                drug = data[0].split('=')[1]
+                limit = data[1].split('=')[1]
+                print("The user asked for %s and especified a limit of %s" % (drug, limit))
+                print("client has succesfully made a request")
+                nombre_arch = "fda_info.html"
+                file_sent(nombre_arch)
+                ask_inf(drug, limit)
+            return
+
+
+
+
 
 
 # Handler = http.server.SimpleHTTPRequestHandler

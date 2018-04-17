@@ -15,4 +15,8 @@ class OpenFDAClient():
     #We also move the one for searching drugs
     pass
 #hago lo mismo con los otros.
-#the ones for creating html list con el segundo
+#the ones for creating html list con el tercero
+
+class testHTTPRequestHandler,egtc
+
+         client= OpenFDAClient
