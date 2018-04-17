@@ -30,7 +30,7 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
             print("SEARCH: client entered search web")
             with open("search.html",'r') as f:
                 mensaje= f.read()
-                self.wfile.write(bytes(mensaje), "utf8")
+                self.wfile.write(bytes(mensaje, "utf8"))
 
         elif 'Search' in path:  # let´s try to find a drug and a limit entered by user
             print("SEARCHED: client has attemped to make a request")
