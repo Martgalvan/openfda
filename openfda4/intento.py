@@ -33,17 +33,18 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
                 self.wfile.write(bytes(mensaje, "utf8"))
 
         elif 'Search' in path:  # let´s try to find a drug and a limit entered by user
-            data = self.path.strip('/search?Label').split('&')
+            headers = {'User-Agent': 'http-client'}
+            conn = http.client.HTTPSConnection("api.fda.gov")
+            data = self.path.strip('/search?').split('&')
             drug = data[0].split('=')[1]
             limit = data[1].split('=')[1]
             print("client has succesfully made a request")
-            headers = {'User-Agent': 'http-client'}
-            conn = http.client.HTTPSConnection("api.fda.gov")
+
+
             url = "/drug/label.json?search=active_ingredient:"+ drug + '&' + 'limit=' + limit
             print(url)
             conn.request("GET", url, None, headers)
             r1 = conn.getresponse()
-            print(r1.status, r1.reason)
             repos_raw = r1.read().decode("utf-8")
             conn.close()
             repos = json.loads(repos_raw)
