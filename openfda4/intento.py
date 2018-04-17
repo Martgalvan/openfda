@@ -37,24 +37,24 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
 
 
 
-            path = self.path
+        path = self.path
 
-            if path == "/":
-                nombre_arch = "search.html"
-                print("SEARCH: client entered search web")
-                file_sent(nombre_arch)
+        if path == "/":
+            nombre_arch = "search.html"
+            print("SEARCH: client entered search web")
+            file_sent(nombre_arch)
 
-            elif 'Search' in path:  # let´s try to find a drug and a limit entered by user
-                print("SEARCHED: client has attemped to make a request")
-                data = self.path.strip('/search.html').split('&')
-                drug = data[0].split('=')[1]
-                limit = data[1].split('=')[1]
-                print("The user asked for %s and especified a limit of %s" % (drug, limit))
-                print("client has succesfully made a request")
-                nombre_arch = "fda_info.html"
-                file_sent(nombre_arch)
-                ask_inf(drug, limit)
-            return
+        elif 'Search' in path:  # let´s try to find a drug and a limit entered by user
+            print("SEARCHED: client has attemped to make a request")
+            data = self.path.strip('/search.html').split('&')
+            drug = data[0].split('=')[1]
+            limit = data[1].split('=')[1]
+            print("The user asked for %s and especified a limit of %s" % (drug, limit))
+            print("client has succesfully made a request")
+            nombre_arch = "fda_info.html"
+            file_sent(nombre_arch)
+            ask_inf(drug, limit)
+        return
 
 
 
