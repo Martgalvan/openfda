@@ -10,9 +10,9 @@ def process_client(clientsocket):
 
     print(clientsocket)
     print(clientsocket.recv(1024))
-	fer = clientsocket.recv(1024)
+    fer = clientsocket.recv(1024)
     ale= fer.split('\n',maxsplit = 1)
-	print(ale)
+    print(ale)
     with open("patatotas.html","r") as f:
         hey = f.read()
     web_contents = hey
