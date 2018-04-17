@@ -35,11 +35,16 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
         #conn.close()
         #repos = json.loads(repos_raw)
 
-        with open
+        with open("fda_info.html", "w"):
+            self.wfile.write(bytes('<html><head><h1>You searched for %s drugs </h1>\n<ol>' % limit,"utf8"))
 
-
-
-
+            for i in range(len(repos['results'])):
+                try:
+                    drug = "<li>" + "brand name is: " + repos['results'][i]["openfda"]["brand_name"][0] + "</li>"
+                    self.wfile.write(bytes(drug, "utf8"))
+                except KeyError:
+                    continue
+            self.wfile.write(bytes('</ol><h3>Thank you, % (IP, PORT), "utf8"))
 
         # Send message back to client
         message = "Hello world! " + self.path
