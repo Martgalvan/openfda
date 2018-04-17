@@ -24,15 +24,15 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
 
 
 
-        path = self.path
+        #path = self.path
 
-        if path == "/":
+        if self.path == "/":
             print("SEARCH: client entered search web")
             with open("searc.html",'r') as f:
                 mensaje= f.read()
                 self.wfile.write(bytes(mensaje, "utf8"))
 
-        elif 'Search' in path:  # let´s try to find a drug and a limit entered by user
+        elif 'Search' in self.path:  # let´s try to find a drug and a limit entered by user
             headers = {'User-Agent': 'http-client'}
             conn = http.client.HTTPSConnection("api.fda.gov")
             data = self.path.strip('/search?').split('&')
