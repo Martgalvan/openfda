@@ -19,22 +19,9 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
 
 
         def file_sent(nombre_arch):
-            with open(nombre_arch) as f:
-                mensaje= f.read
-                self.wfile.write(bytes(str(mensaje),"utf8"))
-
-
-        def ask_inf(generic_name,limit):
-
-            headers = {'User-Agent': 'http-client'}
-            conn = http.client.HTTPSConnection("api.fda.gov")
-            conn.request("GET", "/drug/label.json?search=generic_name:%s&limit=%s" % (generic_name,limit), None, headers)
-            r1 = conn.getresponse()
-            print(r1.status, r1.reason)
-            repos_raw = r1.read().decode("utf-8")
-            conn.close()
-            repos = json.loads(repos_raw)
-
+            with open(nombre_arch,'r') as f:
+                mensaje= f.read()
+                self.wfile.write(bytes(str(mensaje)), "utf8")
 
 
         path = self.path
@@ -49,11 +36,19 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
             data = self.path.strip('/search.html').split('&')
             drug = data[0].split('=')[1]
             limit = data[1].split('=')[1]
-            print("The user asked for %s and especified a limit of %s" % (drug, limit))
             print("client has succesfully made a request")
             nombre_arch = "fda_info.html"
             file_sent(nombre_arch)
-            ask_inf(drug, limit)
+            headers = {'User-Agent': 'http-client'}
+            conn = http.client.HTTPSConnection("api.fda.gov")
+            url = "/drug/label.json?search=generic_name:"+ drug + '&' + 'limit=' + limit
+            conn.request("GET", url, None, headers)
+            r1 = conn.getresponse()
+            print(r1.status, r1.reason)
+            repos_raw = r1.read().decode("utf-8")
+            conn.close()
+            repos = json.loads(repos_raw)
+            self.wfile.write(bytes(str(repos), "utf8"))
         return
 
 
