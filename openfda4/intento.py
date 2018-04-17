@@ -28,27 +28,26 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
 
         if path == "/":
             print("SEARCH: client entered search web")
-            with open("search.html",'r') as f:
+            with open("searc.html",'r') as f:
                 mensaje= f.read()
                 self.wfile.write(bytes(mensaje, "utf8"))
 
         elif 'Search' in path:  # let´s try to find a drug and a limit entered by user
-            print("SEARCHED: client has attemped to make a request")
-            data = self.path.strip('/search.html').split('&')
+            data = self.path.strip('/search?Label').split('&')
             drug = data[0].split('=')[1]
             limit = data[1].split('=')[1]
             print("client has succesfully made a request")
-            nombre_arch = "fda_info.html"
             headers = {'User-Agent': 'http-client'}
             conn = http.client.HTTPSConnection("api.fda.gov")
-            url = "/drug/label.json?search=generic_name:"+ drug + '&' + 'limit=' + limit
+            url = "/drug/label.json?search=active_ingredient:"+ drug + '&' + 'limit=' + limit
+            print(url)
             conn.request("GET", url, None, headers)
             r1 = conn.getresponse()
             print(r1.status, r1.reason)
             repos_raw = r1.read().decode("utf-8")
             conn.close()
             repos = json.loads(repos_raw)
-            self.wfile.write(bytes(str(repos), "utf8"))
+            self.wfile.write(bytes(repos), "utf8")
         return
 
 
