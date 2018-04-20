@@ -7,7 +7,7 @@ import json
 IP = "localhost"  # Localhost means "I": your local machine
 PORT = 8002
 
-socketserver.TCPServer.allow_reuse_address = True
+
 # HTTPRequestHandler class
 class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
     # GET
@@ -32,7 +32,7 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
                 mensaje= f.read()
                 self.wfile.write(bytes(mensaje, "utf8"))
 
-        elif 'search' in self.path:  # let´s try to find a drug and a limit entered by user
+        elif 'Search' in self.path:  # let´s try to find a drug and a limit entered by user
             headers = {'User-Agent': 'http-client'}
             conn = http.client.HTTPSConnection("api.fda.gov")
             data = self.path.strip('/search?').split('&')
@@ -48,7 +48,7 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
             repos_raw = r1.read().decode("utf-8")
             conn.close()
             repos = json.loads(repos_raw)
-            self.wfile.write(bytes(json.dumps(repos), "utf8"))
+            self.wfile.write(bytes(repos), "utf8")
         return
 
 
