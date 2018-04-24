@@ -18,11 +18,12 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
         self.end_headers()
 
 
-        #def file_sent(nombre_arch):
-         #   with open(nombre_arch,'r') as f:
+        def file_sent(nombre_arch):
+           with open(nombre_arch,'r') as f:
              #   mensaje= f.read()
+        self.wfile.write(bytes(message, "utf8"))
 
-
+        #Para el nombre
 
         #path = self.path
 
@@ -32,15 +33,13 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
                 mensaje= f.read()
                 self.wfile.write(bytes(mensaje, "utf8"))
 
-        elif 'search' in self.path:  # let´s try to find a drug and a limit entered by user
+        elif 'search' in self.path.active:  # let´s try to find a drug and a limit entered by user
             headers = {'User-Agent': 'http-client'}
             conn = http.client.HTTPSConnection("api.fda.gov")
             data = self.path.strip('/search?').split('&')
             drug = data[0].split('=')[1]
             limit = data[1].split('=')[1]
             print("client has succesfully made a request")
-
-
             url = "/drug/label.json?search=active_ingredient:"+ drug + '&' + 'limit=' + limit
             print(url)
             conn.request("GET", url, None, headers)
@@ -49,6 +48,7 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
             conn.close()
             repos = json.loads(repos_raw)
             self.wfile.write(bytes(json.dumps(repos), "utf8"))
+
         return
 
 
