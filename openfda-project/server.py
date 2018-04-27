@@ -40,7 +40,7 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
             drug = []
             a = 0
             nlimit= int(limit)
-            intro = "<head>" + "Here is your drugs ID list" + '</head>'+ '<body style="background-color:snow;">'
+            intro = "<head>"+ '<h1>' + "Here is your drugs ID list" +'<body style="background-color:snow;">'+'</h1>'+ '</head>'
             sd = "<ol>"
 
             while a < nlimit:
