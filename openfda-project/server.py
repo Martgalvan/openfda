@@ -3,6 +3,9 @@ import socketserver
 import http.client
 import json
 
+
+
+
 # -- IP and the port of the server
 IP = "localhost"  # Localhost means "I": your local machine
 PORT = 8000
@@ -18,14 +21,45 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
         self.end_headers()
 
 
-        def file_sent(nombre_arch):
-           with open(nombre_arch,'r') as f:
-             #   mensaje= f.read()
-        self.wfile.write(bytes(message, "utf8"))
+        def active_ingredient():
+            headers = {'User-Agent': 'http-client'}
+            conn = http.client.HTTPSConnection("api.fda.gov")
+            data = self.path.strip('/search?').split('&')
+            drug = data[0].split('=')[1]
+            limit = data[1].split('=')[1]
+            print("client has succesfully made a request")
 
-        #Para el nombre
+            url = "/drug/label.json?search=active_ingredient:" + drug + '&' + 'limit=' + limit
+            print(url)
+            conn.request("GET", url, None, headers)
+            r1 = conn.getresponse()
+            repos_raw = r1.read().decode("utf-8")
+            conn.close()
+            repos = json.loads(repos_raw)
 
-        #path = self.path
+            drug = []
+            a = 0
+            nlimit= int(limit)
+            intro = "<head>" + "Here is your drugs ID list" + '</head>'+ '<body style="background-color:snow;">'
+            sd = "<ol>"
+
+            while a < nlimit:
+                try:
+                    drug.append(repos['results'][a]['openfda']['brand_name'][0])
+                    a += 1
+
+                except:
+                    a += 1
+                    print("There is no drug with this active ingredient")
+
+            with open("trial4.html", "w") as f:
+                f.write(intro)
+                f.write(sd)
+                for el in drug:
+                    el_1 = "<t>" + "<li>" + el
+                    f.write(el_1)
+
+
 
         if self.path == "/":
             print("SEARCH: client entered search web")
@@ -33,21 +67,11 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
                 mensaje= f.read()
                 self.wfile.write(bytes(mensaje, "utf8"))
 
-        elif 'search' in self.path.active:  # let´s try to find a drug and a limit entered by user
-            headers = {'User-Agent': 'http-client'}
-            conn = http.client.HTTPSConnection("api.fda.gov")
-            data = self.path.strip('/search?').split('&')
-            drug = data[0].split('=')[1]
-            limit = data[1].split('=')[1]
-            print("client has succesfully made a request")
-            url = "/drug/label.json?search=active_ingredient:"+ drug + '&' + 'limit=' + limit
-            print(url)
-            conn.request("GET", url, None, headers)
-            r1 = conn.getresponse()
-            repos_raw = r1.read().decode("utf-8")
-            conn.close()
-            repos = json.loads(repos_raw)
-            self.wfile.write(bytes(json.dumps(repos), "utf8"))
+        elif 'active' in self.path: # let´s try to find a drug and a limit entered by user
+            active_ingredient()
+            with open("trial4.html", "r") as f:
+                holaaa = f.read()
+                self.wfile.write(bytes(holaaa, "utf8"))
 
         return
 
