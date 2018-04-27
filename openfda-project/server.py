@@ -70,8 +70,8 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
         elif 'active' in self.path: # let´s try to find a drug and a limit entered by user
             active_ingredient()
             with open("trial4.html", "r") as f:
-                holaaa = f.read()
-                self.wfile.write(bytes(holaaa, "utf8"))
+                ingr = f.read()
+                self.wfile.write(bytes(ingr, "utf8"))
 
         return
 
