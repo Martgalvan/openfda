@@ -1,12 +1,10 @@
-def active_ingredient():
+def companies_list():
     headers = {'User-Agent': 'http-client'}
     conn = http.client.HTTPSConnection("api.fda.gov")
-    data = self.path.strip('/search?').split('&')
-    drug = data[0].split('=')[1]
-    limit = data[1].split('=')[1]
+    data = self.path.strip('/search?')
+    limit = data[0].split('=')[1]
     print("client has succesfully made a request")
-
-    url = "/drug/label.json?search=active_ingredient:" + drug + '&' + 'limit=' + limit
+    url = "/drug/label.json?limit=" + limit
     print(url)
     conn.request("GET", url, None, headers)
     r1 = conn.getresponse()
@@ -17,12 +15,12 @@ def active_ingredient():
     drug = []
     a = 0
     nlimit = int(limit)
-    intro = "<head>" + '<h1>' + "Here is your manufacturer name list" + '<body style="background-color:snow;">' + '</h1>' + '</head>'
+    intro = "<head>" + '<h1>' + "Here is your drug default list" + '<body style="background-color:snow;">' + '</h1>' + '</head>'
     sd = "<ol>"
 
     while a < nlimit:
         try:
-            drug.append(repos['results'][a]['openfda']['manufacturer_name'][0])
+            drug.append(repos['results'][a]['openfda']['brand_name'][0])
             a += 1
 
         except:

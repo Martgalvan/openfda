@@ -51,6 +51,7 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
                 except:
                     a += 1
                     print("There is no drug with this active ingredient")
+                    drug.append('There is no drug with this index ingredient')
 
             with open("trial4.html", "w") as f:
                 f.write(intro)
@@ -89,6 +90,82 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
                 except:
                     a += 1
                     print("There is no drug with this active ingredient")
+                    drug.append('There is no drug with this active ingredient')
+
+            with open("trial4.html", "w") as f:
+                f.write(intro)
+                f.write(sd)
+                for el in drug:
+                    el_1 = "<t>" + "<li>" + el
+                    f.write(el_1)
+
+        def drug_list(): #for giving the default drug list
+            headers = {'User-Agent': 'http-client'}
+            conn = http.client.HTTPSConnection("api.fda.gov")
+            data = self.path.strip('label.json?').split('=')
+            limit = data[1]
+            print("client has succesfully made a request")
+            url = "/drug/label.json?limit=" + limit
+            print(url)
+            conn.request("GET", url, None, headers)
+            r1 = conn.getresponse()
+            repos_raw = r1.read().decode("utf-8")
+            conn.close()
+            repos = json.loads(repos_raw)
+
+            drug = []
+            a = 0
+            nlimit = int(limit)
+            intro = "<head>" + '<h1>' + "Here is your drug default list" + '<body style="background-color:snow;">' + '</h1>' + '</head>'
+            sd = "<ol>"
+
+            while a < nlimit:
+                try:
+                    drug.append(repos['results'][a]['openfda']['brand_name'][0])
+                    a += 1
+
+                except:
+                    a += 1
+                    print("There is no drug with this active ingredient")
+                    drug.append('There is no drug with this active ingredient')
+
+
+            with open("trial4.html", "w") as f:
+                f.write(intro)
+                f.write(sd)
+                for el in drug:
+                    el_1 = "<t>" + "<li>" + el
+                    f.write(el_1)
+
+        def manufacturer_list():  # for giving the default drug list
+            headers = {'User-Agent': 'http-client'}
+            conn = http.client.HTTPSConnection("api.fda.gov")
+            data = self.path.strip('label.json?').split('=')
+            limit = data[1]
+            print("client has succesfully made a request")
+            url = "/drug/label.json?limit=" + limit
+            print(url)
+            conn.request("GET", url, None, headers)
+            r1 = conn.getresponse()
+            repos_raw = r1.read().decode("utf-8")
+            conn.close()
+            repos = json.loads(repos_raw)
+
+            drug = []
+            a = 0
+            nlimit = int(limit)
+            intro = "<head>" + '<h1>' + "Here is your drug default list" + '<body style="background-color:snow;">' + '</h1>' + '</head>'
+            sd = "<ol>"
+
+            while a < nlimit:
+                try:
+                    drug.append(repos['results'][a]['openfda']['manufacturer_name'][0])
+                    a += 1
+
+                except:
+                    a += 1
+                    print("There is no drug with this active ingredient")
+                    drug.append('There is no drug with this active ingredient')
 
             with open("trial4.html", "w") as f:
                 f.write(intro)
@@ -99,23 +176,67 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
 
 
         if self.path == "/":
-            print("SEARCH: client entered search web")
-            with open("search.html",'r') as f:
-                mensaje= f.read()
-                self.wfile.write(bytes(mensaje, "utf8"))
+            try:
+                print("SEARCH: client entered search web")
+                with open("search.html",'r') as f:
+                    mensaje= f.read()
+                    self.wfile.write(bytes(mensaje, "utf8"))
+            except KeyError:
+                print('ERROR')
+                with open("error.html",'r') as f:
+                    mensaje= f.read()
+                    self.wfile.write(bytes(mensaje, "utf8"))
+
 
         elif 'active' in self.path: # let´s try to find a drug and a limit entered by user
-            active_ingredient()
-            with open("trial4.html", "r") as f:
-                ingr = f.read()
-                self.wfile.write(bytes(ingr, "utf8"))
+            try:
+                active_ingredient()
+                with open("trial4.html", "r") as f:
+                    ingr = f.read()
+                    self.wfile.write(bytes(ingr, "utf8"))
+            except KeyError:
+                print('ERROR')
+                with open("error.html", 'r') as f:
+                    mensaje = f.read()
+                    self.wfile.write(bytes(mensaje, "utf8"))
+
 
         elif 'manufacturer' in self.path:
-            manufacturer_name()
-            with open("trial4.html", "r") as f:
-                ingr = f.read()
-                self.wfile.write(bytes(ingr, "utf8"))
+            try:
+                manufacturer_list()
+                with open("trial4.html", "r") as f:
+                    ingr = f.read()
+                    self.wfile.write(bytes(ingr, "utf8"))
+            except KeyError:
+                print('ERROR')
+                with open("error.html", 'r') as f:
+                    mensaje = f.read()
+                    self.wfile.write(bytes(mensaje, "utf8"))
 
+
+        elif 'druglist'in self.path:
+            try:
+                drug_list()
+                with open("trial4.html", "r") as f:
+                    ingr = f.read()
+                    self.wfile.write(bytes(ingr, "utf8"))
+            except KeyError:
+                print('ERROR')
+                with open("error.html", 'r') as f:
+                    mensaje = f.read()
+                    self.wfile.write(bytes(mensaje, "utf8"))
+
+        elif 'manufacturerlist'in self.path:
+            try:
+                manufacturer_list()
+                with open("trial4.html", "r") as f:
+                    ingr = f.read()
+                    self.wfile.write(bytes(ingr, "utf8"))
+            except KeyError:
+                print('ERROR')
+                with open("error.html", 'r') as f:
+                    mensaje = f.read()
+                    self.wfile.write(bytes(mensaje, "utf8"))
 
         return
 
