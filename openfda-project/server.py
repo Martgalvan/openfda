@@ -51,7 +51,7 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
                 except:
                     a += 1
                     print("There is no drug with this active ingredient")
-                    drug.append('There is no drug with this index ingredient')
+                    drug.append('Unknown')
 
             with open("trial4.html", "w") as f:
                 f.write(intro)
@@ -90,7 +90,7 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
                 except:
                     a += 1
                     print("There is no drug with this active ingredient")
-                    drug.append('There is no drug with this active ingredient')
+                    drug.append('Unknown')
 
             with open("trial4.html", "w") as f:
                 f.write(intro)
@@ -127,7 +127,7 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
                 except:
                     a += 1
                     print("There is no drug with this active ingredient")
-                    drug.append('There is no drug with this active ingredient')
+                    drug.append('Unknown')
 
 
             with open("trial4.html", "w") as f:
@@ -137,7 +137,7 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
                     el_1 = "<t>" + "<li>" + el
                     f.write(el_1)
 
-        def manufacturer_list():  # for giving the default drug list
+        def manufacturer_list():  # for giving the default manufacturer name list
             headers = {'User-Agent': 'http-client'}
             conn = http.client.HTTPSConnection("api.fda.gov")
             data = self.path.strip('label.json?').split('=')
@@ -154,7 +154,7 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
             drug = []
             a = 0
             nlimit = int(limit)
-            intro = "<head>" + '<h1>' + "Here is your drug default list" + '<body style="background-color:snow;">' + '</h1>' + '</head>'
+            intro = "<head>" + '<h1>' + "Here is your manufacturer name default list" + '<body style="background-color:snow;">' + '</h1>' + '</head>'
             sd = "<ol>"
 
             while a < nlimit:
@@ -165,7 +165,7 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
                 except:
                     a += 1
                     print("There is no drug with this active ingredient")
-                    drug.append('There is no drug with this active ingredient')
+                    drug.append('Unknown')
 
             with open("trial4.html", "w") as f:
                 f.write(intro)
