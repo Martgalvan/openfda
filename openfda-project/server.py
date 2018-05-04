@@ -16,7 +16,7 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
     # GET
     def do_GET(self):
 
-        path=self.path
+        path =self.path  #We use this step so that all the different status codes change in the diferent cases we have
 
         if path == "/" or 'searchDrug' in path or 'searchCompany' in path or 'listDrugs' in path or 'listCompanies' in path or 'listWarnings' in path:
             status_code = 200
@@ -51,7 +51,7 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
             drug = data[0].split('=')[1]
             if 'limit'in self.path:
                 limit = data[1].split('=')[1]
-                if 'limit' == '':
+                if 'limit' == '':  #In case the limit is empty we use 10 as default
                     limit= '10'
             else:
                 limit= '10'
@@ -88,7 +88,7 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
                     el_1 = "<t>" + "<li>" + el
                     f.write(el_1)
 
-        def manufacturer_name():
+        def manufacturer_name():  #For the manufacturer name of a drug
             headers = {'User-Agent': 'http-client'}
             conn = http.client.HTTPSConnection("api.fda.gov")
             data = self.path.strip('/search?').split('&')
@@ -110,7 +110,7 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
 
             drug = []
             a = 0
-            nlimit = int(limit)
+            nlimit = int(limit) #We transform the limit into an integer, so we can use it. 
             intro = "<head>" + '<h1>' + "Here is your drug list from the manufacturer you searched." + '<body style="background-color:snow;">' + '</h1>' + '</head>'
             sd = "<ol>"
 
@@ -254,7 +254,7 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
                 f.write(sd)
                 while i < nlimit:
                     for el in drug:
-                        el_1 = "<t>" + "<li>" + 'The warning for:' + drug[i] + 'is' + warnin[i]
+                        el_1 = "<t>" + "<li>" + 'The warning for:' + drug[i] + ' '+ 'is' + ' '+ warnin[i]
                         f.write(el_1)
                         i += 1
 
