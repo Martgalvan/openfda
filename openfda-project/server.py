@@ -28,6 +28,8 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
             drug = data[0].split('=')[1]
             if 'limit'in self.path:
                 limit = data[1].split('=')[1]
+                if 'limit' == '':
+                    limit= '10'
             else:
                 limit= '10'
             print("client has succesfully made a request")
@@ -70,6 +72,8 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
             manufacturer_name = data[0].split('=')[1]
             if 'limit'in self.path:
                 limit = data[1].split('=')[1]
+                if 'limit' == '':
+                    limit = '10'
             else:
                 limit= '10'
             print("client has succesfully made a request")
@@ -238,7 +242,7 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
                 self.wfile.write(bytes(ingr, "utf8"))
 
         elif 'searchCompany' in self.path:
-            manufacturer_list()
+            manufacturer_name()
             with open("trial4.html", "r") as f:
                 ingr = f.read()
                 self.wfile.write(bytes(ingr, "utf8"))
