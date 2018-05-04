@@ -221,7 +221,10 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
             repos = json.loads(repos_raw)
 
             drug = []
+            warnin = []
             a = 0
+            b = 0
+            i = 0
             nlimit = int(limit)
             intro = "<head>" + '<h1>' + "Here is your warning list" + '<body style="background-color:snow;">' + '</h1>' + '</head>'
             sd = "<ol>"
@@ -229,7 +232,6 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
             while a < nlimit:
                 try:
                     drug.append(repos['results'][a]['openfda']['brand_name'][0])
-                    drug.append(repos['results'][a]['warnings'][0])
                     a += 1
 
                 except:
@@ -237,12 +239,24 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
                     print("There is no drug with this active ingredient")
                     drug.append('Unknown')
 
+            while b < nlimit:
+                try:
+                    warnin.append(repos['results'][a]['warnings'][0])
+                    b += 1
+
+                except:
+                    b += 1
+                    print("There is no drug with this active ingredient")
+                    warnin.append('Unknown')
+
             with open("trial4.html", "w") as f:
                 f.write(intro)
                 f.write(sd)
-                for el in drug:
-                    el_1 = "<t>" + "<li>" + el
-                    f.write(el_1)
+                while i < nlimit:
+                    for el in drug:
+                        el_1 = "<t>" + "<li>" + 'The warning for:' + drug[i] + 'is' + warnin[i]
+                        f.write(el_1)
+                        i += 1
 
 
         if self.path == "/":
