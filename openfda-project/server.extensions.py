@@ -26,7 +26,10 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
             conn = http.client.HTTPSConnection("api.fda.gov")
             data = self.path.strip('/search?').split('&')
             drug = data[0].split('=')[1]
-            limit = data[1].split('=')[1]
+            if 'limit'in self.path:
+                limit = data[1].split('=')[1]
+            else:
+                limit= '10'
             print("client has succesfully made a request")
 
             url = "/drug/label.json?search=active_ingredient:" + drug + '&' + 'limit=' + limit
@@ -65,9 +68,11 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
             conn = http.client.HTTPSConnection("api.fda.gov")
             data = self.path.strip('/search?').split('&')
             manufacturer_name = data[0].split('=')[1]
-            limit = data[1].split('=')[1]
+            if 'limit'in self.path:
+                limit = data[1].split('=')[1]
+            else:
+                limit= '10'
             print("client has succesfully made a request")
-
             url = "/drug/label.json?search=openfda.manufacturer_name:" + manufacturer_name + '&' + 'limit=' + limit
             print(url)
             conn.request("GET", url, None, headers)
@@ -227,66 +232,51 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
 
 
         elif 'active' in self.path: # let´s try to find a drug and a limit entered by user
-            try:
-                active_ingredient()
-                with open("trial4.html", "r") as f:
-                    ingr = f.read()
-                    self.wfile.write(bytes(ingr, "utf8"))
-            except KeyError:
-                print('ERROR')
-                with open("error.html", 'r') as f:
-                    mensaje = f.read()
-                    self.wfile.write(bytes(mensaje, "utf8"))
-
+            active_ingredient()
+            with open("trial4.html", "r") as f:
+                ingr = f.read()
+                self.wfile.write(bytes(ingr, "utf8"))
 
         elif 'manufacturer' in self.path:
-            try:
-                manufacturer_list()
-                with open("trial4.html", "r") as f:
-                    ingr = f.read()
-                    self.wfile.write(bytes(ingr, "utf8"))
-            except KeyError:
-                print('ERROR')
-                with open("error.html", 'r') as f:
-                    mensaje = f.read()
-                    self.wfile.write(bytes(mensaje, "utf8"))
-
+            manufacturer_list()
+            with open("trial4.html", "r") as f:
+                ingr = f.read()
+                self.wfile.write(bytes(ingr, "utf8"))
 
         elif 'druglist'in self.path:
-            try:
-                drug_list()
-                with open("trial4.html", "r") as f:
-                    ingr = f.read()
-                    self.wfile.write(bytes(ingr, "utf8"))
-            except KeyError:
-                print('ERROR')
-                with open("error.html", 'r') as f:
-                    mensaje = f.read()
-                    self.wfile.write(bytes(mensaje, "utf8"))
+            drug_list()
+            with open("trial4.html", "r") as f:
+                ingr = f.read()
+                self.wfile.write(bytes(ingr, "utf8"))
 
         elif 'manufacturerlist'in self.path:
-            try:
-                manufacturer_list()
-                with open("trial4.html", "r") as f:
-                    ingr = f.read()
-                    self.wfile.write(bytes(ingr, "utf8"))
-            except KeyError:
-                print('ERROR')
-                with open("error.html", 'r') as f:
-                    mensaje = f.read()
-                    self.wfile.write(bytes(mensaje, "utf8"))
+            manufacturer_list()
+            with open("trial4.html", "r") as f:
+                ingr = f.read()
+                self.wfile.write(bytes(ingr, "utf8"))
 
         elif 'warning'in self.path:
-            try:
-                warning_list()
-                with open("trial4.html", "r") as f:
-                    ingr = f.read()
-                    self.wfile.write(bytes(ingr, "utf8"))
-            except KeyError:
-                print('ERROR')
-                with open("error.html", 'r') as f:
-                    mensaje = f.read()
-                    self.wfile.write(bytes(mensaje, "utf8"))
+            warning_list()
+            with open("trial4.html", "r") as f:
+                ingr = f.read()
+                self.wfile.write(bytes(ingr, "utf8"))
+
+        elif 'secret'in self.path:
+            with open("secret.html", "r") as f:
+                ingr = f.read()
+                self.wfile.write(bytes(ingr, "utf8"))
+
+        elif 'redirect'in self.path:
+            print("SEARCH: client entered search web")
+            with open("search.html", 'r') as f:
+                mensaje = f.read()
+                self.wfile.write(bytes(mensaje, "utf8"))
+
+        else:
+            print('ERROR')
+            with open("error.html", 'r') as f:
+                mensaje = f.read()
+                self.wfile.write(bytes(mensaje, "utf8"))
 
         return
 
