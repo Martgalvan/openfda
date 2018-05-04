@@ -15,10 +15,33 @@ socketserver.TCPServer.allow_reuse_address = True
 class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
     # GET
     def do_GET(self):
+
+        path=self.path
+
+        if path == "/" or 'searchDrug' in path or 'searchCompany' in path or 'listDrugs' in path or 'listCompanies' in path or 'listWarnings' in path:
+            status_code = 200
+        elif 'redirect' in path:
+            status_code = 302
+        elif 'secret' in path:
+            status_code = 401
+        else:
+            status_code = 404
+
+        self.send_response(status_code)
+
+        if path == "/" or 'searchDrug' in path or 'searchCompany' in path or 'listDrugs' in path or 'listCompanies' in path or 'listWarnings' in path:
+            self.send_header('Content-type', 'text/html')
+        elif 'redirect' in path:
+            self.send_header('Location', 'http://localhost:8000/')
+        elif 'secret' in path:
+            self.send_header('WWW-Authenticate', 'Basic realm="OpenFDA Private Zone"')
+
+
         # Send response status code
         self.send_response(200)
         self.send_header('Content-type', 'text/html')
         self.end_headers()
+
 
 
         def active_ingredient():  #For searching the active ingredient
