@@ -223,7 +223,7 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
             drug = []
             warnin = []
             a = 0
-            b = 0
+            b = 0  #We use a for the name of the drug and b for its warning
             i = 0
             nlimit = int(limit)
             intro = "<head>" + '<h1>' + "Here is your warning list" + '<body style="background-color:snow;">' + '</h1>' + '</head>'
