@@ -4,7 +4,7 @@ import http.client
 import json
 
 
-
+#I have three extensions done
 
 # -- IP and the port of the server
 IP = "localhost"  # Localhost means "I": your local machine
@@ -110,7 +110,7 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
 
             drug = []
             a = 0
-            nlimit = int(limit) #We transform the limit into an integer, so we can use it. 
+            nlimit = int(limit) #We transform the limit into an integer, so we can use it.
             intro = "<head>" + '<h1>' + "Here is your drug list from the manufacturer you searched." + '<body style="background-color:snow;">' + '</h1>' + '</head>'
             sd = "<ol>"
 
@@ -278,13 +278,13 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
                 ingr = f.read()
                 self.wfile.write(bytes(ingr, "utf8"))
 
-        elif 'searchCompany' in self.path:
+        elif 'searchCompany' in self.path:   #For searching companies
             manufacturer_name()
             with open("trial4.html", "r") as f:
                 ingr = f.read()
                 self.wfile.write(bytes(ingr, "utf8"))
 
-        elif 'listDrugs'in self.path:
+        elif 'listDrugs'in self.path: #For the list of drugs
             drug_list()
             with open("trial4.html", "r") as f:
                 ingr = f.read()
